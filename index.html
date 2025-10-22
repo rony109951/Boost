@@ -1,163 +1,144 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>💀 في الضلمة 💀</title>
+<title>👁️‍🗨️ في الظلام - قصص رعب</title>
 <style>
-  @import url( https://fonts.googleapis.com/css2?family=Cairo:wght@500&display=swap );
+  @import url( https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500&display=swap );
 
   body {
-    margin: 0;
-    font-family:  Cairo , sans-serif;
-    background: url( fg.jpg ) no-repeat center center fixed;
-    background-size: cover;
-    color: #ff1c1c;
-    overflow-x: hidden;
-  }
-
-  .overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8);
-    z-index: -1;
-  }
-
-  header {
+    background: radial-gradient(circle at center, #000000, #050505, #0a0a0a);
+    color: #fff;
+    font-family:  Noto Naskh Arabic , serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
     text-align: center;
-    padding: 30px 10px;
-    font-size: 2rem;
-    text-shadow: 0 0 20px #ff0000;
+    overflow: hidden;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    text-shadow: 0 0 10px #ff0000, 0 0 25px #aa0000;
     animation: flicker 2s infinite;
   }
 
   @keyframes flicker {
-    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {opacity: 1;}
-    20%, 24%, 55% {opacity: 0.4;}
-  }
-
-  .container {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 20px;
-    text-align: center;
-    background: rgba(0,0,0,0.6);
-    border-radius: 10px;
-    box-shadow: 0 0 30px #ff0000;
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+      opacity: 1;
+    }
+    20%, 24%, 55% {
+      opacity: 0.2;
+    }
   }
 
   textarea {
-    width: 100%;
+    width: 80%;
     height: 100px;
-    background: #111;
-    color: #fff;
+    margin-top: 20px;
+    background: rgba(0,0,0,0.8);
     border: 2px solid #ff0000;
-    border-radius: 8px;
-    padding: 10px;
-    resize: none;
+    color: white;
     font-size: 1rem;
+    padding: 10px;
+    border-radius: 10px;
+    resize: none;
+    outline: none;
   }
 
   button {
+    margin-top: 15px;
     background: #ff0000;
     color: white;
     border: none;
-    padding: 12px 25px;
-    font-size: 1rem;
-    border-radius: 8px;
+    padding: 10px 30px;
+    border-radius: 10px;
+    font-size: 1.2rem;
     cursor: pointer;
-    margin-top: 15px;
     transition: 0.3s;
-    box-shadow: 0 0 20px #ff0000;
   }
 
   button:hover {
-    background: #aa0000;
+    background: #990000;
+    box-shadow: 0 0 20px #ff0000;
   }
 
-  .story {
-    margin-top: 30px;
-    font-size: 1.1rem;
-    line-height: 2;
-    color: #ffdddd;
-    text-shadow: 0 0 10px #990000;
-    text-align: right;
+  #story {
+    margin-top: 40px;
+    width: 80%;
+    font-size: 1.3rem;
+    line-height: 2rem;
+    text-align: justify;
+    text-shadow: 0 0 5px #ff0000;
+    white-space: pre-wrap;
     direction: rtl;
   }
 
   footer {
+    position: fixed;
+    bottom: 15px;
     text-align: center;
-    margin-top: 40px;
-    padding: 20px;
-    font-size: 0.9rem;
-    color: #ff1c1c;
+    width: 100%;
+    font-size: 1rem;
+    color: #ff0000;
     text-shadow: 0 0 10px #ff0000;
   }
 </style>
 </head>
 <body>
-  <div class="overlay"></div>
-  <header>💀 في الضلمة 💀</header>
+  <h1>💀 في الظلام 💀</h1>
+  <textarea id="prompt" placeholder="اكتب فكرة القصة المرعبة هنا... 👁️"></textarea>
+  <button onclick="generateStory()">احكِ لي قصة 🔮</button>
+  <div id="story"></div>
 
-  <div class="container">
-    <textarea id="prompt" placeholder="اكتب فكرة القصة هنا..."></textarea>
-    <br>
-    <button onclick="generateStory()">احكيِ  قصة 🔮</button>
-    <div id="story" class="story"></div>
-  </div>
+  <audio id="bg" src="rtt.mp3" loop></audio>
 
-  <footer>© جميع الحقوق محفوظة م/روني البحيره</footer>
+  <footer>✍️ توقيع: <b>روني البحيره</b> — جميع الحقوق محفوظة ©</footer>
 
-  <audio id="bgmusic" src="rtt.mp3" preload="auto"></audio>
+<script>
+async function generateStory() {
+  const text = document.getElementById("prompt").value.trim();
+  const storyDiv = document.getElementById("story");
+  const audio = document.getElementById("bg");
 
-  <script>
-    const storyDiv = document.getElementById("story");
-    const bgmusic = document.getElementById("bgmusic");
+  if (!text) {
+    storyDiv.innerHTML = "👻 اكتب فكرة القصة أولاً...";
+    return;
+  }
 
-    async function generateStory() {
-      const userInput = document.getElementById("prompt").value.trim();
-      if (!userInput) {
-        storyDiv.innerHTML = "<p>🩸 اكتب فكرة القصة أولاً...</p>";
-        return;
-      }
+  storyDiv.innerHTML = "💀 جاري استحضار الأرواح وكتابة القصة...";
+  audio.play();
 
-      storyDiv.innerHTML = "⏳ جاري تأليف قصتك المرعبة...";
-      try {
-        // لو الـ API وقع نستخدم توليد عشوائي محلي
-        const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(userInput)}&langpair=ar|en`);
-        if (!res.ok) throw new Error();
+  try {
+    const res = await fetch("https://alakreb.vercel.app/api/ai/gpt?q=" + encodeURIComponent(`
+      اكتب قصة رعب قصيرة ومرعبة باللهجة العربية.
+      الموضوع: ${text}
+      يجب أن تحتوي القصة على بداية مشوقة، وأحداث مرعبة، ونهاية غامضة أو صادمة.
+    `));
 
-        // تشغيل الموسيقى وقت الكتابة
-        bgmusic.currentTime = 0;
-        bgmusic.play();
+    const data = await res.json();
+    const story = data.message.replace(/\*/g, "").trim();
 
-        // توليد نص مؤقت مرعب لو الـ API ما رجعش قصة حقيقية
-        const horrorStory = `
-في ليلةٍ هادئةٍ جدًا، سقطت ${userInput} من مكانٍ مرتفعٍ...
-لكنها لم تمت — بل عادت بعد ثلاثة أيامٍ بعينين حمراوين تلمعان في الظلام.
-ومنذ ذلك الحين، كل من ينادي اسمها يسمع صوت أنفاس خلف أذنه... 💀🔥
-\n\n✍️ مؤلف القصة: روني البحيره
-        `;
+    storyDiv.innerHTML = "";
+    typeText(story, storyDiv);
 
-        // تأثير الكتابة
-        storyDiv.innerHTML = "";
-        let i = 0;
-        const speed = 40;
-        function typeWriter() {
-          if (i < horrorStory.length) {
-            storyDiv.innerHTML += horrorStory.charAt(i);
-            i++;
-            window.scrollTo(0, document.body.scrollHeight);
-            setTimeout(typeWriter, speed);
-          }
-        }
-        typeWriter();
+  } catch (e) {
+    storyDiv.innerHTML = "⚠️ حدث خطأ أثناء توليد القصة. جرب تاني.";
+  }
+}
 
-      } catch (e) {
-        storyDiv.innerHTML = "⚠️ لا تقلق... الظلام نفسه سيكمل القصة عنك 🔥";
-      }
-    }
-  </script>
+function typeText(text, element) {
+  let i = 0;
+  const speed = 35;
+  const interval = setInterval(() => {
+    element.innerHTML += text.charAt(i);
+    i++;
+    if (i >= text.length) clearInterval(interval);
+  }, speed);
+}
+</script>
 </body>
 </html>
